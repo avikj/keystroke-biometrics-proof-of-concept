@@ -1,6 +1,6 @@
 var synaptic = require('synaptic');
-var avikData = require('./avik').data;
-var sahasData = require('./sahas').data;
+var avikData = require('../data/avik').data;
+var sahasData = require('../data/sahas').data;
 var Layer = synaptic.Layer,
     Network = synaptic.Network,
     Trainer = synaptic.Trainer;
@@ -34,8 +34,8 @@ trainer.train(trainingData, {
 	log: 1000
 });
 
-var avikTestData = require('./avikTest').data;
-var sahasTestData = require('./sahasTest').data;
+var avikTestData = require('../data/avikTest').data;
+var sahasTestData = require('../data/sahasTest').data;
 var cutoff = 0.95;
 var falseRejections = 0;
 var falseAcceptances = 0;
