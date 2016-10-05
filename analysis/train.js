@@ -36,18 +36,18 @@ trainer.train(trainingData, {
 
 var avikTestData = require('../data/avikTest').data;
 var sahasTestData = require('../data/sahasTest').data;
-var cutoff = 0.95;
+var threshold = 0.95;
 var falseRejections = 0;
 var falseAcceptances = 0;
 avikTestData.forEach(function(input) {
 	var output = network.activate(input);
-	if(output < cutoff) {
+	if(output < threshold) {
 		falseRejections++;
 	}
 });
 sahasTestData.forEach(function(input) {
 	var output = network.activate(input);
-	if(output >= cutoff) {
+	if(output >= threshold) {
 		falseAcceptances++;
 	}
 });
