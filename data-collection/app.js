@@ -13,10 +13,16 @@ app.get('/', function(req, res) {
 	res.sendFile(__dirname+'/index.html');
 });
 app.post('/data', function(req, res) {
-	var allData = JSON.parse(fs.readFileSync('./'+process.argv[2])).data;
+	var allData;
+	try {
+		allData = JSON.parse(fs.readFileSync('./'+process.argv[2])).data;
+	} catch(e) {
+		allData = [];
+	}
+	
 	allData.push(req.body.data);
 	fs.writeFileSync('./'+process.argv[2], JSON.stringify({data: allData}));
 	res.sendStatus(200);
 })
-app.use(express.static('public'))
+app.use(express.static(__dirname+'/public'))
 app.listen(3000);
