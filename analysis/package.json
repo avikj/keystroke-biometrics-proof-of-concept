@@ -1,0 +1,14 @@
+{
+  "name": "analysis",
+  "version": "1.0.0",
+  "description": "Keystroke biometrics data analysis",
+  "main": "train.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Avik Jain <avik@avikjain.me>",
+  "license": "MIT",
+  "dependencies": {
+    "synaptic": "^1.0.8"
+  }
+}
