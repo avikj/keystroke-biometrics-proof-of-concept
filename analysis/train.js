@@ -1,6 +1,13 @@
+if(process.argv.length < 4) {
+	console.log('Please specify 2 user names.');
+	process.exit();
+}
+var userName = process.argv[2];
+var intruderName = process.argv[3];
+
 var synaptic = require('synaptic');
-var avikData = require('../data/avik').data;
-var sahasData = require('../data/sahas').data;
+var userData = require(`../data/${userName}`).data;
+var intruderData = require(`../data/${intruderName}`).data;
 var Layer = synaptic.Layer,
     Network = synaptic.Network,
     Trainer = synaptic.Trainer;
@@ -20,11 +27,17 @@ var network = new Network({
 var trainer = new Trainer(network);
 var trainingData = [];
 
-avikData.forEach(function(dataPoint) {
+// use equal number of data points for both
+if(userData.length > intruderData.length) {
+	userData = userData.slice(0, intruderData.length);
+} else if(intruderData.length > userData.length) {
+	intruderData = intruderData.slice(0, userData.length);
+}
+userData.forEach(function(dataPoint) {
 	trainingData.push({ input: dataPoint, output: [1] });
 });
 
-sahasData.forEach(function(dataPoint) {
+intruderData.forEach(function(dataPoint) {
 	trainingData.push({ input: dataPoint, output: [0] });
 });
 
@@ -34,18 +47,18 @@ trainer.train(trainingData, {
 	log: 1000
 });
 
-var avikTestData = require('../data/avikTest').data;
-var sahasTestData = require('../data/sahasTest').data;
-var threshold = 0.95;
+var userTestData = require(`../data/${userName}Test`).data;
+var intruderTestData = require(`../data/${intruderName}Test`).data;
+var threshold = 0.5;
 var falseRejections = 0;
 var falseAcceptances = 0;
-avikTestData.forEach(function(input) {
+userTestData.forEach(function(input) {
 	var output = network.activate(input);
 	if(output < threshold) {
 		falseRejections++;
 	}
 });
-sahasTestData.forEach(function(input) {
+intruderTestData.forEach(function(input) {
 	var output = network.activate(input);
 	if(output >= threshold) {
 		falseAcceptances++;
@@ -53,6 +66,6 @@ sahasTestData.forEach(function(input) {
 });
 
 console.log(`
-False Acceptance Rate: ${falseAcceptances/sahasTestData.length}
-False Rejection Rate: ${falseRejections/avikTestData.length}
+False Acceptance Rate: ${falseAcceptances/intruderTestData.length}
+False Rejection Rate: ${falseRejections/userTestData.length}
 `)
